@@ -7,13 +7,10 @@ export default class Beneficier extends BaseModel {
   public id: number
   
   @column()
-  public name: string
-
-  @column()
-  public lastname: string
-
-  @column()
   public document: number
+
+  @column()
+  public celphone: number
 
   @belongsTo(() => Client, {
     foreignKey: 'client_id'
