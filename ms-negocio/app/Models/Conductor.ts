@@ -1,20 +1,21 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Hall from './Hall'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class Site extends BaseModel {
+export default class Conductor extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public document: number
+
   @column()
   public name: string
 
   @column()
-  public direction: string
+  public email: string
 
-  @hasMany(() => Hall, {
-    foreignKey: 'site_id'
-  })
-  public hall: HasMany<typeof Hall>
+  @column()
+  public user_id: string
   
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

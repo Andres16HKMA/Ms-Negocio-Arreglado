@@ -8,8 +8,9 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('origin').notNullable()
       table.string('destiny').notNullable()
-      table.string('plate').notNullable()
+      table.integer('services_id').unsigned().references('id').inTable('services')
 
+      //relacion con servicio
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

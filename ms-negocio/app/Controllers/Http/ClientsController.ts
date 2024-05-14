@@ -3,42 +3,67 @@ import Clients from 'App/Models/Client';
 import ClientValidator from 'App/Validators/ClientValidator';
 import axios from 'axios';
 import Env from '@ioc:Adonis/Core/Env'
+import { ModelObject } from '@ioc:Adonis/Lucid/Orm';
 
 export default class ClientssController {
     public async find({ request, params }: HttpContextContract) {
+        let theRequest = request.toJSON()
+        const customers: ModelObject[] = [];
+        const { page, per_page } = request.only(["page", "per_page"]);
+        let thePermission: object = {
+            url: theRequest.url,
+            method: theRequest.method
+          }
         if (params.id) {
-            let TheClient = await Clients.findOrFail(params.id);
-            await TheClient.load("beneficier")
-            return TheClient;
-        } else {
-            const data = request.all()
-            if ("page" in data && "per_page" in data) {
-                const page = request.input('page', 1);
-                const perPage = request.input("per_page", 20);
-                let auxClient: {}[] = [];
-
-                let originalClient: Clients[] = await Clients.query().preload("beneficier").paginate(page, perPage);
-                for (let i = 0; i < originalClient.length; i++) {
-                    let api_response = await axios.get(`${Env.get('MS_SECURITY')}/api/public/user/`+originalClient[i].user_id);
-                    
-                    let data = {  
-                        "id": originalClient[i].id,
-                        "name": api_response.data.name,
-                        "email": api_response.data.email,
-                        "celphone": originalClient[i].celphone,
-                        "document": originalClient[i].document,
-                    };
-                    auxClient.push(data);
-                }
+          const theCustomer: Clients = await Clients.findOrFail(params.id);
+    
+          customers.push(theCustomer);
+        } else if (page && per_page) {
+          const { meta, data } = await Clients.query()
+            .paginate(page, per_page)
+            .then((res) => res.toJSON())
             
-                return auxClient
-            } else {
-                return await Clients.query().preload("beneficier")
-            }
-
+          await Promise.all(
+            data.map(async (customer: Clients) => {
+              const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${customer.user_id}`, thePermission)
+              const { _id, name, email } = res.data;
+              const { id, document, celphone } = customer;
+              customers.push({
+                id,
+                user_id: _id,
+                name,
+                email,
+                document,
+                celphone,
+              });
+            }),
+          );
+    
+          return { meta, data: customers };
+        } else {
+          const allClients = await Clients.all();
+          customers.push(...allClients.map((c) => c.toJSON()));
         }
-
-    }
+        
+    
+        await Promise.all(customers.map(async (clients: Clients, index: number) => {
+            const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${clients.user_id}`, thePermission 
+            );
+            const { _id, name, email } = res.data;
+            const { id, document, celphone } = clients;
+            customers[index] = {
+              id,
+              user_id: _id,
+              name,
+              email,
+              document,
+              celphone
+            };
+          }),
+        );
+    
+        return customers;
+      }
     public async store({request}:HttpContextContract){
         const body = await request.validate(ClientValidator)
         const theClients=await Clients.create(body)
@@ -48,7 +73,7 @@ export default class ClientssController {
         const page =request.input('page', 1);
         const perPage = request.input("per_page", 20)
         let client:Clients[]=await Clients.query().paginate(page, perPage)
-        return client;
+        return client;  
     }
     public async show({params}:HttpContextContract){
         return Clients.findOrFail(params.id)

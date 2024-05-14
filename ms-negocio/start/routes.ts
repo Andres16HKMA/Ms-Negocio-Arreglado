@@ -93,11 +93,10 @@ Route.get('/cremacion/:id', 'CremacionsController.show');
 Route.put('/cremacion/:id', 'CremacionsController.update');
 Route.delete('/cremacion/:id', 'CremacionsController.destroy');
 
-Route.post('/client', 'ClientControllers.store');
-Route.get('/client', 'ClientControllers.index');
-Route.get('/client/:id', 'ClientControllers.show');
-Route.put('/client/:id', 'ClientControllers.update');
-Route.delete('/client/:id', 'ClientControllers.destroy');
+Route.post('/clients', 'ClientsController.store');
+Route.get('/clients', 'ClientsController.index');
+Route.put('/clients/:id', 'ClientsController.update');
+Route.delete('/clients/:id', 'ClientsController.destroy');
 Route.get('/clients/:id', 'ClientsController.find')
 
 

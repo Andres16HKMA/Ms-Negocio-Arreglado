@@ -12,6 +12,9 @@ export default class Beneficier extends BaseModel {
   @column()
   public celphone: number
 
+  @column()
+  public client_id: number
+
   @belongsTo(() => Client, {
     foreignKey: 'client_id'
   })

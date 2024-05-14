@@ -1,15 +1,21 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Site from './Site'
 
 export default class Hall extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public quan_assis: number
+  public site_id: number
 
   @column()
-  public quan_decea: number
+  public capacity: number
+
+  @belongsTo(() => Site, {
+    foreignKey: 'site_id'
+  })
+  public site: BelongsTo<typeof Site>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

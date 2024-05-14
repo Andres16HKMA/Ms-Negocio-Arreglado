@@ -5,17 +5,26 @@ export default class ClientValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    user_id_security:schema.string([rules.minLength(2),rules.unique({
+    user_id:schema.string([rules.minLength(2),rules.unique({
       table: 'clients',
-      column: 'user_id_location',
+      column: 'user_id',
       caseInsensitive: true,
     })]),
-    name:schema.string([rules.minLength(1)]),
-    celphone:schema.number([rules.minLength(10),rules.maxLength(10)]),
-    document:schema.number([rules.range(10,11)]),
-    lastname:schema.string.optional([rules.minLength(1)])
-  })
+    document:schema.number([rules.range(1,9999999999)
+    ]),
+    celphone:schema.number([rules.range(1,9999999999)]),
+    paymethod:schema.string([  rules.required(),
+      rules.minLength(4),
+      rules.maxLength(20),]),
+      idfallecido:schema.string([
+        rules.minLength(2),rules.unique({
+          table: 'clients',
+          column: 'user_id',
+          caseInsensitive: true,
+        })
+      ])
 
+  })
 
   public messages: CustomMessages = {}
 }
