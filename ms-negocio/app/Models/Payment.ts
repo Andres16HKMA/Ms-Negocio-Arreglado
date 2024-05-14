@@ -6,7 +6,17 @@ export default class Payment extends BaseModel {
   public id: number
 
   @column()
-  public payment_status: string
+  public valorpagar: number
+
+  @column()
+  public cuotas: number
+
+  @column()
+  public estadopago: string
+
+  @column()
+  public suscription_id: number
+
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

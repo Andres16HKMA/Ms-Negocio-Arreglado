@@ -1,29 +1,19 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class GraveValidator {
   constructor(protected ctx: HttpContextContract) {}
+  public schema = schema.create({
 
-  /*
-   * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
-   *
-   * For example:
-   * 1. The username must be of data type string. But then also, it should
-   *    not contain special characters or numbers.
-   *    ```
-   *     schema.string([ rules.alpha() ])
-   *    ```
-   *
-   * 2. The email must be of data type string, formatted as a valid
-   *    email. But also, not used by any other user.
-   *    ```
-   *     schema.string([
-   *       rules.email(),
-   *       rules.unique({ table: 'users', column: 'email' }),
-   *     ])
-   *    ```
-   */
-  public schema = schema.create({})
+      duration:schema.number([rules.range(30,180), rules.required
+      ]),
+      name:schema.string([rules.minLength(5),rules.maxLength(20), rules.required
+      ]),
+      services_id:schema.number([rules.required
+      ]),
+      direction:schema.string([rules.minLength(5), rules.maxLength(30), rules.required
+      ]),
+  })
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`

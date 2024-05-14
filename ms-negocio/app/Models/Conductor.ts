@@ -16,6 +16,9 @@ export default class Conductor extends BaseModel {
 
   @column()
   public user_id: string
+
+  @column()
+  public carModel: string
   
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

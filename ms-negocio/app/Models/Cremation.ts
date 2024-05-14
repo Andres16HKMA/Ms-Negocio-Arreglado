@@ -10,9 +10,6 @@ export default class Cremation extends BaseModel {
   public duration: number
 
   @column()
-  public assistants: number
-
-  @column()
   public name: string
 
   @column()

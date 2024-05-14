@@ -25,7 +25,10 @@ export default class PaymentsController {
      public async update({ params, request }: HttpContextContract) {
         const body = request.body();
         const thePayment: Payment = await Payment.findOrFail(params.id);
-        thePayment.payment_status = body.payment_status;
+        thePayment.valorpagar = body.valorpagar;
+        thePayment.cuotas = body.cuotas;
+        thePayment.estadopago = body.estadopago;
+
         return await thePayment.save();
     }
     

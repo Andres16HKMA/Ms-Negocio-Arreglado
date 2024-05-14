@@ -26,6 +26,8 @@ export default class PlansController {
         const body = request.body();
         const thePlan: Plan = await Plan.findOrFail(params.id);
         thePlan.plan_type = body.plan_type;
+        thePlan.cantidadbeneficiers = body.cantidadbeneficiers;
+
         return await thePlan.save();
     }
     

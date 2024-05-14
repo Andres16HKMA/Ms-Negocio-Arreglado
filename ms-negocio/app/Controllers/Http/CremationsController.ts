@@ -21,7 +21,6 @@ export default class CremationsController {
         const theCremation: Cremation = await Cremation.findOrFail(params.id);
         theCremation.name = body.name;
         theCremation.duration = body.duration;
-        theCremation.assistants = body.assistants;
         return theCremation.save();
     }
     public async destroy({params, response}: HttpContextContract){

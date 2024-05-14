@@ -9,7 +9,7 @@ export default class Administrador extends BaseModel {
   public document: number
 
   @column()
-  public user_id: number
+  public user_id: string
 
   @column()
   public name: string

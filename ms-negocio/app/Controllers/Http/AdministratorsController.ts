@@ -1,70 +1,91 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Administrador from 'App/Models/Administrador';
 import axios from 'axios';
 import Env from '@ioc:Adonis/Core/Env'
+import { ModelObject } from '@ioc:Adonis/Lucid/Orm';
+import Administrador from 'App/Models/Administrador';
+import AdministratorValidator from 'App/Validators/AdministratorValidator';
 
-export default class administradorsController {
+export default class AdministratorController {
     public async find({ request, params }: HttpContextContract) {
+        let theRequest = request.toJSON()
+        const administrador: ModelObject[] = [];
+        const { page, per_page } = request.only(["page", "per_page"]);
+        let thePermission: object = {
+            url: theRequest.url,
+            method: theRequest.method
+          }
         if (params.id) {
-            let TheClient = await Administrador.findOrFail(params.id);
-            return TheClient;
-        } else {
-            const data = request.all()
-            if ("page" in data && "per_page" in data) {
-                const page = request.input('page', 1);
-                const perPage = request.input("per_page", 20);
-                let auxClient: {}[] = [];
-
-                let originalAdministrador: Administrador[] = await Administrador.query().paginate(page, perPage);
-                for (let i = 0; i < originalAdministrador.length; i++) {
-                    let api_response = await axios.get(`${Env.get('MS_SECURITY')}/api/public/user/`+originalAdministrador[i].user_id);
-                    
-                    let data = {  
-                        "id": originalAdministrador[i].id,
-                        "name": "name provisional",
-                        "email": api_response.data.email,
-                        "document": originalAdministrador[i].document,
-
-                    };
-                    auxClient.push(data);
-                }
+          const theAdministrador: Administrador = await Administrador.findOrFail(params.id);
+    
+          administrador.push(theAdministrador);
+        } else if (page && per_page) {
+          const { meta, data } = await Administrador.query()
+            .paginate(page, per_page)
+            .then((res) => res.toJSON())
             
-                return auxClient
-            } else {
-                return await Administrador.query()
-            }
-
+          await Promise.all(
+            data.map(async (admin: Administrador) => {
+              const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${admin.user_id}`, thePermission)
+              const { _id, name, email } = res.data;
+              const { id, document } = admin;
+              administrador.push({
+                id,
+                user_id: _id,
+                name,
+                email,
+                document,
+              });
+            }),
+          );
+    
+          return { meta, data: administrador };
+        } else {
+          const allAdministrador = await Administrador.all();
+          administrador.push(...allAdministrador.map((c) => c.toJSON()));
         }
-
-    }
-
+        
+    
+        await Promise.all(administrador.map(async (admin: Administrador, index: number) => {
+            const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${admin.user_id}`, thePermission 
+            );
+            const { _id, name, email } = res.data;
+            const { id, document } = admin;
+            admin[index] = {
+              id,
+              user_id: _id,
+              name,
+              email,
+              document,
+            };
+          }),
+        );
+    
+        return administrador;
+      }
     public async store({request}:HttpContextContract){
-        let body=request.body();
-        const theadministrador=await Administrador.create(body);
-        return theadministrador;
+        const body = await request.validate(AdministratorValidator)
+        const theAdministrador=await Administrador.create(body)
+        return theAdministrador;
     }
     public async index({request}: HttpContextContract){
-        const page = request.input('page', 1);
-        const perPage = request.input('perPage', 20);
-        let administrador:Administrador[]= await Administrador.query().paginate(page, perPage)
-        return administrador;
+        const page =request.input('page', 1);
+        const perPage = request.input("per_page", 20)
+        let admin:Administrador[]=await Administrador.query().paginate(page, perPage)
+        return admin;  
     }
-    public async show({params}: HttpContextContract){
-        return Administrador.findOrFail(params.id);
+    public async show({params}:HttpContextContract){
+        return Administrador.findOrFail(params.id)
     }
-    public async update({ params, request }: HttpContextContract) {
+    public async update({params, request}: HttpContextContract){
         const body = request.body();
-        const theadministrador: Administrador = await Administrador.findOrFail(params.id);
-        theadministrador.document= body.document;
-        theadministrador.user_id= body.user_id;
+        const theAdministrador: Administrador = await Administrador.findOrFail(params.id);
+        theAdministrador.document = body.document;
 
-        return await theadministrador.save();
+        return theAdministrador.save();
     }
-
-    // delete
-    public async delete({ params, response }: HttpContextContract) {
-        const theadministrador: Administrador = await Administrador.findOrFail(params.id);
+    public async destroy({params, response}: HttpContextContract){
+        const theAdministrador: Administrador = await Administrador.findOrFail(params.id);
         response.status(204);
-        return await theadministrador.delete();
+        return theAdministrador.delete()
     }
 }
