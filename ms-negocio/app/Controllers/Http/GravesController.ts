@@ -1,9 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Grave from 'App/Models/Grave';
+import GraveValidator from 'App/Validators/GraveValidator';
 
 export default class GraveController {
     public async store({request}:HttpContextContract){
-        let body = request.body();
+        const body = await request.validate(GraveValidator)
         const theGrave=await Grave.create(body)
         return theGrave;
     }
@@ -20,8 +21,6 @@ export default class GraveController {
         const body = request.body();
         const theGrave: Grave = await Grave.findOrFail(params.id);
         theGrave.name = body.name;
-        theGrave.duration = body.duration;
-        theGrave.direction = body.direction;
         return theGrave.save();
     }
     public async destroy({params, response}: HttpContextContract){

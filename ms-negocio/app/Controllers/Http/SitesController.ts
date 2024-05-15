@@ -1,10 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Site from 'App/Models/Site';
+import SiteValidator from 'App/Validators/SiteValidator';
 
 export default class SitesController {
     // create
     public async store({request}:HttpContextContract){
-        let body=request.body();
+        const body = await request.validate(SiteValidator)
         const theSite=await Site.create(body);
         return theSite;
     }

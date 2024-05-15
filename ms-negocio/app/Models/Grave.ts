@@ -10,11 +10,8 @@ export default class Grave extends BaseModel {
   public name: string
 
   @column()
-  public duration: number
+  public namecementary: string
   
-  @column()
-  public direction: string
-
   @column()
   public services_id: number
 

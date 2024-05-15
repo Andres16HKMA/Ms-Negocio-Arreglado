@@ -8,7 +8,6 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('plan_type')
       table.integer('cantidadbeneficiers')
-      table.integer('client_id').unsigned().references('id').inTable('clients')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

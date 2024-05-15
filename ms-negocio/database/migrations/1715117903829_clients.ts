@@ -12,8 +12,7 @@ export default class extends BaseSchema {
       table.string('user_id', 60)
       table.string('name', 20)
       table.string('email', 20)
-      table.string('fallecido', 20)
-      table.integer('idFallecido', 20)
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

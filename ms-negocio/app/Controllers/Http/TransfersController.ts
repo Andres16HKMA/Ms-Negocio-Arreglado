@@ -21,7 +21,7 @@ export default class TransfersController {
         const theTraslade: Transfer = await Transfer.findOrFail(params.id);
         theTraslade.origin = body.origin;
         theTraslade.destiny = body.destiny;
-        theTraslade.plate = body.plate;
+        theTraslade.plateCar = body.plateCar;
         return theTraslade.save();
     }
     public async destroy({params, response}: HttpContextContract){

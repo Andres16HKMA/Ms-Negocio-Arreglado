@@ -8,8 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('valorpagar')
       table.integer('cuotas')
-      table.string('estadopago', 40)
-      table.integer('suscription_id').unsigned().references('id').inTable('susciptions')
+      table.string('estado')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -1,24 +1,21 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Transfer from './Transfer'
 import Cremation from './Cremation'
 import Grave from './Grave'
-import Client from './Client'
-import Chat from './Chat'
 import Comment from './Comment'
+import Ejecution from './Ejecution'
+import Planxservice from './Planxservice'
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public type: string
+  public type_Services: string
 
   @column()
-  public client_id: number
-  
-  @column()
-  public date_service: string
+  public direction: string
 
   @hasOne(() => Transfer, {
     foreignKey: 'service_id'
@@ -35,20 +32,21 @@ export default class Service extends BaseModel {
   })
   public grave: HasOne<typeof Grave>
 
-  @hasOne(() => Chat, {
-    foreignKey: 'services_id'
-  })
-  public chat: HasOne<typeof Chat>
 
   @hasOne(() => Comment, {
     foreignKey: 'services_id'
   })
   public comment: HasOne<typeof Comment>
 
-  @belongsTo(() => Client, {
-    foreignKey: 'client_id'
+  @hasMany(() => Ejecution, {
+    foreignKey: 'services_id'
   })
-  public client: BelongsTo<typeof Client>
+  public ejecution: HasMany<typeof Ejecution>
+
+  @hasMany(() => Planxservice, {
+    foreignKey: 'services_id'
+  })
+  public planxservices: HasMany<typeof Planxservice>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

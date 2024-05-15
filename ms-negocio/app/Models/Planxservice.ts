@@ -1,22 +1,25 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Plan from './Plan'
 import Service from './Service'
 
-export default class Transfer extends BaseModel {
+export default class Planxservice extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public plateCar: string
-
-  @column()
-  public destiny: string
-
-  @column()
-  public origin: string
+  public plan_id: number
 
   @column()
   public services_id: number
+
+  @column()
+  public namePlanxServices: string
+
+  @belongsTo(() => Plan, {
+    foreignKey: 'plan_id'
+  })
+  public plan: BelongsTo<typeof Plan>
 
   @belongsTo(() => Service, {
     foreignKey: 'services_id'

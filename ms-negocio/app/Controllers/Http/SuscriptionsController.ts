@@ -1,9 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Suscription from 'App/Models/Suscription';
+import SuscriptionValidator from 'App/Validators/SuscriptionValidator';
 
 export default class SuscriptionsdController {
     public async store({request}:HttpContextContract){
-        let body = request.body();
+        const body = await request.validate(SuscriptionValidator)
         const theSuscription=await Suscription.create(body)
         return theSuscription;
     }
@@ -13,8 +14,26 @@ export default class SuscriptionsdController {
         let suscription:Suscription[]=await Suscription.query().paginate(page, perPage)
         return suscription;
     }
-    public async show({params}:HttpContextContract){
-        return Suscription.findOrFail(params.id)
+    public async find({ request, params }: HttpContextContract) {
+        if (params.id) {
+            let theSuscription = await Suscription.findOrFail(params.id);
+            await theSuscription.load("client")
+            await theSuscription.load("plan")
+
+
+            return theSuscription;
+        } else {
+            const data = request.all()
+            if ("page" in data && "per_page" in data) {
+                const page = request.input('page', 1);
+                const perPage = request.input("per_page", 20);
+                return await Suscription.query().paginate(page, perPage)
+            } else {
+                return await Suscription.query()
+            }
+
+        }
+
     }
     public async update({params, request}: HttpContextContract){
         const body = request.body();

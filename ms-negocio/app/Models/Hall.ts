@@ -7,13 +7,13 @@ export default class Hall extends BaseModel {
   public id: number
 
   @column()
-  public site_id: number
+  public sites_id: number
 
   @column()
   public capacity: number
 
   @belongsTo(() => Site, {
-    foreignKey: 'site_id'
+    foreignKey: 'sites_id'
   })
   public site: BelongsTo<typeof Site>
 

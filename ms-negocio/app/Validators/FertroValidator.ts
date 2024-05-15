@@ -1,19 +1,12 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class MessageValidator {
+export default class FertroValidator {
   constructor(protected ctx: HttpContextContract) {}
 
-
   public schema = schema.create({
-    sender:schema.string([rules.minLength(5), rules.maxLength(30)
-    ]),
-    addressee:schema.string([rules.minLength(5), rules.maxLength(30)
-    ]),
-    body:schema.string([rules.minLength(5), rules.maxLength(150)
-    ]),
-    state:schema.enum(["enviando", "enviado" , "recibido"
-    ] as const)
+    peso:schema.number([rules.range(1,100)])
+
   })
 
   /**

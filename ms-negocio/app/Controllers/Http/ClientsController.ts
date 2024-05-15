@@ -4,6 +4,7 @@ import ClientValidator from 'App/Validators/ClientValidator';
 import axios from 'axios';
 import Env from '@ioc:Adonis/Core/Env'
 import { ModelObject } from '@ioc:Adonis/Lucid/Orm';
+import Client from 'App/Models/Client';
 
 export default class ClientssController {
     public async find({ request, params }: HttpContextContract) {
@@ -15,8 +16,7 @@ export default class ClientssController {
             method: theRequest.method
           }
         if (params.id) {
-          const theCustomer: Clients = await Clients.findOrFail(params.id);
-    
+          const theCustomer: Clients = await Client.findOrFail(params.id);
           customers.push(theCustomer);
         } else if (page && per_page) {
           const { meta, data } = await Clients.query()
@@ -25,7 +25,7 @@ export default class ClientssController {
             
           await Promise.all(
             data.map(async (customer: Clients) => {
-              const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${customer.user_id}`, thePermission)
+              const res = await axios.get(`${Env.get("MS_COLOMBIA")}/api/v1/Airport/${customer.user_id}`, thePermission)
               const { _id, name, email } = res.data;
               const { id, document, celphone } = customer;
               customers.push({
@@ -47,7 +47,7 @@ export default class ClientssController {
         
     
         await Promise.all(customers.map(async (clients: Clients, index: number) => {
-            const res = await axios.get(`${Env.get("MS_SECURITY")}/api/public/users/${clients.user_id}`, thePermission 
+            const res = await axios.get(`${Env.get("MS_COLOMBIA")}/api/v1/Airport//${clients.user_id}`, thePermission 
             );
             const { _id, name, email } = res.data;
             const { id, document, celphone } = clients;

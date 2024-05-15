@@ -20,28 +20,15 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-
-Route.post("/departaments","DepartmentsController.store");
-Route.get("/departaments","DepartmentsController.index");
-Route.get("/departaments/:id","DepartmentsController.show");
-Route.put("/departaments/:id","DepartmentsController.update");
-Route.delete("/departaments/:id","DepartmentsController.delete");
-
-Route.post("/cities","CitiesController.store");
-Route.get("/cities","CitiesController.index");
-Route.get("/cities/:id","CitiesController.show");
-Route.put("/cities/:id","CitiesController.update");
-Route.delete("/cities/:id","CitiesController.delete");
-
 Route.post("/sites","SitesController.store");
-Route.get("/sites","DepartmentsController.index");
-Route.get("/sites/:id","DepartmentsController.show");
-Route.put("/sites/:id","DepartmentsController.update");
-Route.delete("/sites/:id","DepartmentsController.delete");
+Route.get("/sites","SitesController.index");
+Route.get("/sites/:id","SitesController.show");
+Route.put("/sites/:id","SitesController.update");
+Route.delete("/sites/:id","SitesController.delete");
 
 Route.post("/halls","HallsController.store");
 Route.get("/halls","HallsController.index");
-Route.get("/halls/:id","HallsController.show");
+Route.get("/halls/:id","HallsController.find");
 Route.put("/halls/:id","HallsController.update");
 Route.delete("/halls/:id","HallsController.delete");
 
@@ -81,11 +68,11 @@ Route.get('/sepulturas/:id', 'SepulturasController.show');
 Route.put('/sepulturas/:id', 'SepulturasController.update');
 Route.delete('/sepulturas/:id', 'SepulturasController.destroy');
 
-Route.post('/mensajes', 'MensajesController.store');
-Route.get('/mensajes', 'MensajeController.index');
-Route.get('/mensajes/:id', 'MensajesController.show');
-Route.put('/mensjaes/:id', 'MensajesController.update');
-Route.delete('/mensjaes/:id', 'MensajesController.destroy');
+Route.post('/message', 'MessagesController.store');
+Route.get('/message', 'MessagesController.index');
+Route.get('/message/:id', 'MessagesController.show');
+Route.put('/message/:id', 'MessagesController.update');
+Route.delete('/message/:id', 'MessagesController.destroy');
 
 Route.post('/cremacion', 'CremacionsController.store');
 Route.get('/cremacion', 'CremacionsController.index');
@@ -100,3 +87,31 @@ Route.delete('/clients/:id', 'ClientsController.destroy');
 Route.get('/clients/:id', 'ClientsController.find')
 
 
+Route.post('/administrators', 'AdministratorController.store');
+Route.get('/administrators', 'AdministratorController.index');
+Route.put('/administrators/:id', 'AdministratorController.update');
+Route.delete('/administrators/:id', 'AdministratorController.destroy');
+Route.get('/administrators/:id', 'AdministratorController.find')
+
+Route.post('/beneficiers', 'BeneficiersController.store');
+Route.get('/beneficiers', 'BeneficiersController.index');
+Route.put('/beneficiers/:id', 'BeneficiersController.update');
+Route.delete('/beneficiers/:id', 'BeneficiersController.destroy');
+Route.get('/beneficiers/:id', 'BeneficiersController.find')
+
+
+Route.post('/suscription', 'SuscriptionsController.store');
+Route.get('/suscription', 'SuscriptionsController.index');
+Route.get('/suscription/:id', 'SuscriptionsController.find');
+Route.put('/suscription/:id', 'SuscriptionsController.update');
+Route.delete('/suscription/:id', 'SuscriptionsController.destroy');
+
+Route.post('/fertro', 'FertrosController.store');
+Route.get('/fertro/:id', 'FertrosController.show');
+
+Route.post('/desplazamiento', 'DesplazamientosController.store');
+Route.get('/desplazamiento/:id', 'DesplazamientosController.find');
+Route.get('/desplazamientos/:id', 'DesplazamientosController.show');
+
+Route.post('/conductor', 'ConductorsController.store');
+Route.get('/conductor/:id', 'ConductorsController.show');

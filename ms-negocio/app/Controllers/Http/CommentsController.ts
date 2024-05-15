@@ -1,9 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Comment from 'App/Models/Comment';
+import CommentValidator from 'App/Validators/CommentValidator';
 
 export default class CommentsController {
     public async store({request}:HttpContextContract){
-        let body = request.body();
+        const body = await request.validate(CommentValidator)
         const theComments=await Comment.create(body)
         return theComments;
     }

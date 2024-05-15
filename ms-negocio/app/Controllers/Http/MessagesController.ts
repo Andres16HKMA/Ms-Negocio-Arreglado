@@ -1,9 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Message from 'App/Models/Message';
+import MessageValidator from 'App/Validators/MessageValidator';
 
 export default class MessagesController {
     public async store({request}:HttpContextContract){
-        let body = request.body();
+        const body = await request.validate(MessageValidator)
         const theMessage=await Message.create(body)
         return theMessage;
     }

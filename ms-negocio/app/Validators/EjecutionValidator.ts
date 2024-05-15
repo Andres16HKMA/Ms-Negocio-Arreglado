@@ -1,19 +1,18 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class MessageValidator {
+export default class EjecutionValidator {
   constructor(protected ctx: HttpContextContract) {}
-
-
   public schema = schema.create({
-    sender:schema.string([rules.minLength(5), rules.maxLength(30)
+    client_id:schema.number([rules.range(1, 999)]),
+    services_id:schema.number([rules.range(1, 999)]),
+    fechaservices:schema.number([rules.unique({
+      table: 'ejectuions',
+      column: 'fechaservices',
+      caseInsensitive: true,
+    })
     ]),
-    addressee:schema.string([rules.minLength(5), rules.maxLength(30)
-    ]),
-    body:schema.string([rules.minLength(5), rules.maxLength(150)
-    ]),
-    state:schema.enum(["enviando", "enviado" , "recibido"
-    ] as const)
+    duration:schema.enum([1, 2, 4] as const)
   })
 
   /**

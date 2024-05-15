@@ -7,7 +7,7 @@ export default class HallValidator {
   public schema = schema.create({
     capacity:schema.number([rules.range(15, 40)
     ]),
-    sites_id:schema.number([rules.required
+    sites_id:schema.number([rules.range(1,999)
     ]),
   })
 

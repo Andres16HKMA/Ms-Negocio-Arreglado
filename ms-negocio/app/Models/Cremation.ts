@@ -7,14 +7,13 @@ export default class Cremation extends BaseModel {
   public id: number
 
   @column()
-  public duration: number
-
-  @column()
   public name: string
 
   @column()
-  public services_id: number
+  public namecrematory: string
 
+  @column()
+  public services_id: number
 
   @belongsTo(() => Service, {
     foreignKey: 'services_id'

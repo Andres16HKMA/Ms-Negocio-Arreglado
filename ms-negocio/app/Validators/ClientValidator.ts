@@ -9,21 +9,7 @@ export default class ClientValidator {
       table: 'administrators',
       column: 'user_id',
       caseInsensitive: true,
-    }),
-    rules.unique({
-      table: 'clients',
-      column: 'user_id',
-      caseInsensitive: true,
-    }), rules.unique({
-      table: 'beneficiaries',
-      column: 'user_id',
-      caseInsensitive: true,
-    }),
-    rules.minLength(2),rules.unique({
-      table: 'conductors',
-      column: 'user_id',
-      caseInsensitive: true,
-    }),rules.required
+    })
     ]),
     
     document:schema.number([rules.range(1,9999999999)
@@ -31,14 +17,7 @@ export default class ClientValidator {
     celphone:schema.number([rules.range(1,9999999999)]),
     paymethod:schema.string([rules.required(),
       rules.minLength(4),
-      rules.maxLength(20),]),
-      idfallecido:schema.string([
-        rules.minLength(2),rules.unique({
-          table: 'clients',
-          column: 'user_id',
-          caseInsensitive: true,
-        })
-      ])
+      rules.maxLength(20),])
 
   })
 

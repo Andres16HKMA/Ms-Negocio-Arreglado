@@ -1,22 +1,23 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Beneficier from './Beneficier'
 import Client from './Client'
 
-export default class Beneficier extends BaseModel {
+export default class Titular extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-  
-  @column()
-  public document: number
 
   @column()
-  public celphone: number
+  public state: string
 
   @column()
-  public client_id: number
+  public client_id: string
 
-  @column()
-  public user_id: string
+  @hasMany(() => Beneficier, {
+    foreignKey: 'titular_id'
+  })
+
+  public beneficier: HasMany<typeof Beneficier>
 
   @belongsTo(() => Client, {
     foreignKey: 'client_id'
